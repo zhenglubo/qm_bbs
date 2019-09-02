@@ -1,0 +1,16 @@
+server:
+  port: 8000
+
+spring:
+  profiles:
+    active: dev
+  datasource:
+    driver: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/qm_bbs?useSSL=false&characterEncoding=utf8&serverTimezone=Asia/Shanghai&autoReconnect=true&failOverReadOnly=false
+    username: root
+    password: 123456
+
+# 配置mapper.xml位置
+mybatis-plus:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-location : com.bbs*
