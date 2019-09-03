@@ -3,9 +3,11 @@ package com.bbs.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.bbs.domain.Topic;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.bbs.dto.topic.QueryTopicDetailDto;
 import com.bbs.dto.topic.TopicPageQueryDto;
 import com.bbs.result.DataResult;
-import com.bbs.vo.TopicPageQueryVo;
+import com.bbs.vo.topic.TopicDetailVo;
+import com.bbs.vo.topic.TopicPageQueryVo;
 
 /**
  * <p>
@@ -23,4 +25,11 @@ public interface ITopicService extends IService<Topic> {
      * @return
      */
     DataResult<IPage<TopicPageQueryVo>> pageQueryTopic(TopicPageQueryDto dto);
+
+    /**
+     * 查询帖子详情
+     * @param dto
+     * @return
+     */
+    DataResult<TopicDetailVo> queryDetail(QueryTopicDetailDto dto);
 }

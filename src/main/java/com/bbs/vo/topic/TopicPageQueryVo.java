@@ -1,5 +1,6 @@
-package com.bbs.vo;
+package com.bbs.vo.topic;
 
+import com.bbs.domain.Images;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -25,7 +26,7 @@ public class TopicPageQueryVo {
     @ApiModelProperty(value = "作者")
     private String author;
     @ApiModelProperty(value = "图片地址列表")
-    private List<String> uploadImgIds;
+    private List<Images> uploadImgIds;
     @ApiModelProperty(value = "评论数量")
     private Integer commentCount;
     @ApiModelProperty(value = "浏览次数")

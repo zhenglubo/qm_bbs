@@ -2,10 +2,12 @@ package com.bbs.controller;
 
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.bbs.dto.topic.QueryTopicDetailDto;
 import com.bbs.dto.topic.TopicPageQueryDto;
 import com.bbs.result.DataResult;
 import com.bbs.service.ITopicService;
-import com.bbs.vo.TopicPageQueryVo;
+import com.bbs.vo.topic.TopicDetailVo;
+import com.bbs.vo.topic.TopicPageQueryVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
 
 /**
  * <p>
@@ -35,5 +39,11 @@ public class TopicController {
     @PostMapping("/pageQuery")
     public DataResult<IPage<TopicPageQueryVo>> pageQueryTopic(@RequestBody TopicPageQueryDto dto){
         return topicService.pageQueryTopic(dto);
+    }
+
+    @ApiOperation("查看帖子详情")
+    @PostMapping("/queryDetail")
+    public DataResult<TopicDetailVo> queryDetail(@RequestBody @Valid QueryTopicDetailDto dto){
+        return topicService.queryDetail(dto);
     }
 }

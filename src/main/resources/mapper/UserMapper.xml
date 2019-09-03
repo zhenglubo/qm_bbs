@@ -13,12 +13,12 @@
         <result column="website" property="website" />
         <result column="bio" property="bio" />
         <result column="score" property="score" />
-        <result column="in_time" property="inTime" />
         <result column="token" property="token" />
         <result column="telegram_name" property="telegramName" />
         <result column="email_notification" property="emailNotification" />
         <result column="active" property="active" />
         <result column="is_deleted" property="isDeleted"/>
+        <result column="in_time" property="createdTime" />
     </resultMap>
 
 </mapper>

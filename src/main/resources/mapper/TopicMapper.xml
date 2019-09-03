@@ -4,32 +4,52 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.bbs.domain.Topic">
-    <result column="id" property="id" />
-        <result column="title" property="title" />
-        <result column="content" property="content" />
-        <result column="user_id" property="userId" />
-        <result column="comment_count" property="commentCount" />
-        <result column="collect_count" property="collectCount" />
-        <result column="view_count" property="viewCount" />
-        <result column="top" property="top" />
-        <result column="good" property="good" />
-        <result column="phone" property="phone" />
-        <result column="wechat" property="wechat" />
-        <result column="qq" property="qq" />
-        <result column="upload_img_ids" property="uploadImgIds" />
-        <result column="created_time" property="createdTime" />
-        <result column="last_updated_time" property="lastUpdatedTime" />
-        <result column="is_deleted" property="isDeleted" />
-    </resultMap>
-    <resultMap id="TopicPageQueryVo" type="com.bbs.vo.TopicPageQueryVo">
         <result column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="content" property="content"/>
+        <result column="user_id" property="userId"/>
+        <result column="comment_count" property="commentCount"/>
+        <result column="collect_count" property="collectCount"/>
+        <result column="view_count" property="viewCount"/>
+        <result column="top" property="top"/>
+        <result column="good" property="good"/>
+        <result column="phone" property="phone"/>
+        <result column="wechat" property="wechat"/>
+        <result column="qq" property="qq"/>
+        <result column="upload_img_ids" property="uploadImgIds"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="last_updated_time" property="lastUpdatedTime"/>
+        <result column="is_deleted" property="isDeleted"/>
     </resultMap>
+    <resultMap id="TopicPageQueryVo" type="com.bbs.vo.topic.TopicPageQueryVo">
+        <result column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="content" property="content"/>
+        <result column="author" property="author"/>
+        <result column="comment_count" property="commentCount"/>
+        <result column="view_count" property="viewCount"/>
+        <result column="publish_hours" property="publishHours"/>
+        <collection property="uploadImgIds" ofType="com.bbs.domain.Images" javaType="java.util.ArrayList"
+                    select="getImages" column="upload_img_ids">
+        </collection>
+    </resultMap>
+
+    <select id="getImages" resultMap="com.bbs.mapper.ImagesMapper.BaseResultMap">
+        select * from images
+        where id in (#{ids}) and is_deleted=0
+    </select>
+
     <select id="pageQueryTopic" resultMap="TopicPageQueryVo">
-        select id
-        from topic
+        select a.id id ,a.title,a.content,b.username as
+        author,a.comment_count,a.view_count,
+        a.upload_img_ids,
+        TIMESTAMPDIFF(HOUR,a.created_time,now()) AS publish_hours
+        from topic a
+        inner join user b on a.user_id = b.id
         <where>
+            a.is_deleted = 0 and b.is_deleted = 0
             <if test="dto.userId!=null and dto.userId!=''">
-                user_id=#{dto.userId}
+                and a.user_id=#{dto.userId}
             </if>
         </where>
     </select>

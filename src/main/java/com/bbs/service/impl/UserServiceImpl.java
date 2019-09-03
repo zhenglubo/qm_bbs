@@ -65,7 +65,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         user.setEmail(dto.getEmail());
         user.setToken(UUID.randomUUID().toString());
         user.setScore(0);
-        user.setInTime(LocalDateTime.now());
+        user.setCreatedTime(LocalDateTime.now());
         user.setActive(true);
         user.setIsDeleted(false);
         int result = userMapper.insert(user);

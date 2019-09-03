@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bbs.mapper.CommentsMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.bbs.domain.Comments">
+    <result column="id" property="id" />
+        <result column="topic_id" property="topicId" />
+        <result column="content" property="content" />
+        <result column="user_id" property="userId" />
+        <result column="like_num" property="likeNum"/>
+        <result column="upload_img_ids" property="uploadImgIds" />
+        <result column="is_enabled" property="isEnabled" />
+        <result column="is_deleted" property="isDeleted" />
+        <result column="created_time" property="createdTime" />
+    </resultMap>
+
+</mapper>

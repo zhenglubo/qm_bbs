@@ -57,9 +57,6 @@ public class User extends Model {
     @ApiModelProperty(value = "积分")
     private Integer score;
 
-    @ApiModelProperty(value = "注册时间")
-    private LocalDateTime inTime;
-
     @ApiModelProperty(value = "token")
     private String token;
 
@@ -75,4 +72,7 @@ public class User extends Model {
     @ApiModelProperty(value = "是否被删除")
     @TableLogic
     private Boolean isDeleted;
+
+    @ApiModelProperty(value = "注册时间")
+    private LocalDateTime createdTime;
 }
