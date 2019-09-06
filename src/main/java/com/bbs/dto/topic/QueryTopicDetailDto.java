@@ -19,7 +19,6 @@ public class QueryTopicDetailDto {
     @ApiModelProperty(value = "帖子id",required = true,position = 1,example = "1")
     @NotNull
     private Long topicId;
-    @ApiModelProperty(value = "用户id",required = true,position = 2,example = "3")
-    @NotNull
+    @ApiModelProperty(value = "用户id",required = false,position = 2,example = "2")
     private Long userId;
 }

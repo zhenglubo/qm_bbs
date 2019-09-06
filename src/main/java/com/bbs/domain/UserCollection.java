@@ -12,17 +12,17 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 帖子评论表
+ * 用户收藏
  * </p>
  *
  * @author zlb
- * @since 2019-09-03
+ * @since 2019-09-06
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@ApiModel(value="Comments对象", description="帖子评论表")
-public class Comments extends Model {
+@ApiModel(value="UserCollection对象", description="用户收藏")
+public class UserCollection extends Model {
 
     private static final long serialVersionUID = 1L;
 
@@ -30,26 +30,23 @@ public class Comments extends Model {
     @TableId(type = IdType.AUTO)
     private Long id;
 
-    @ApiModelProperty(value = "帖子id")
-    private Long topicId;
-
-    @ApiModelProperty(value = "评论的内容")
-    private String content;
-
     @ApiModelProperty(value = "用户id")
     private Long userId;
 
-    @ApiModelProperty(value = "点赞数")
-    private Integer likeNum;
+    @ApiModelProperty(value = "帖子id")
+    private Long topicId;
 
-    @ApiModelProperty(value = "是否被禁言0否1是")
-    private Boolean isEnabled;
+    @ApiModelProperty(value = "主题id")
+    private Long themeId;
+
+    @ApiModelProperty(value = "创建时间")
+    private LocalDateTime createdTime;
 
     @ApiModelProperty(value = "是否被删除0否1是")
     private Boolean isDeleted;
 
-    @ApiModelProperty(value = "评论时间")
-    private LocalDateTime createdTime;
+    @ApiModelProperty(value = "更新时间")
+    private LocalDateTime lastUpdatedTime;
 
 
 }

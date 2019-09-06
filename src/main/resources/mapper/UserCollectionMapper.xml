@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bbs.mapper.UserCollectionMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.bbs.domain.UserCollection">
+    <result column="id" property="id" />
+        <result column="user_id" property="userId" />
+        <result column="topic_id" property="topicId" />
+        <result column="theme_id" property="themeId" />
+        <result column="created_time" property="createdTime" />
+        <result column="is_deleted" property="isDeleted" />
+        <result column="last_updated_time" property="lastUpdatedTime" />
+    </resultMap>
+
+    <resultMap id="PageQueryCollectionResultMap" type="com.bbs.vo.usercollection.UserCollectionVo">
+        <result column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="content" property="content"/>
+        <result column="type" property="type"/>
+    </resultMap>
+    <select id="pageQueryCollection" resultMap="PageQueryCollectionResultMap">
+        SELECT a.content,a.title,a.id,'topic' AS type
+        FROM topic a
+        INNER JOIN (
+            SELECT topic_id
+            FROM user_collection
+            WHERE user_id = #{userId}
+        ) b ON a.id = b.topic_id
+
+        UNION
+        SELECT c.content,c.title,c.id,'theme' AS type
+        FROM theme c
+        INNER JOIN (
+        SELECT theme_id
+        FROM user_collection
+        WHERE user_id = #{userId}
+        ) b ON b.theme_id = c.id
+    </select>
+
+</mapper>

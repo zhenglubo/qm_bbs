@@ -4,7 +4,9 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.bbs.domain.Images;
 import com.bbs.domain.Topic;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.bbs.dto.topic.QueryTopicDetailDto;
 import com.bbs.dto.topic.TopicPageQueryDto;
+import com.bbs.vo.topic.TopicDetailVo;
 import com.bbs.vo.topic.TopicPageQueryVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -32,8 +34,15 @@ public interface TopicMapper extends BaseMapper<Topic> {
 
     /**
      * 查询所有图片
-     * @param ids
+     * @param id
      * @return
      */
-    List<Images> getImages(Long ids);
+    List<Images> getImages(Long id);
+
+    /**
+     * 查看贴子详情
+     * @param dto
+     * @return
+     */
+    TopicDetailVo selectDetailWithComment(@Param(value = "dto") QueryTopicDetailDto dto);
 }

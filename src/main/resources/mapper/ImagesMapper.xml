@@ -6,11 +6,17 @@
     <resultMap id="BaseResultMap" type="com.bbs.domain.Images">
     <result column="id" property="id" />
         <result column="topic_id" property="topicId" />
+        <result column="comment_id" property="commentId"/>
         <result column="user_id" property="userId" />
         <result column="admin_id" property="adminId" />
         <result column="download_url" property="downloadUrl" />
         <result column="is_deleted" property="isDeleted" />
         <result column="created_time" property="createdTime" />
+    </resultMap>
+
+    <resultMap id="ImageDownloadUrlResultMap" type="com.bbs.vo.ImageDownloadVo">
+        <result column="id" property="id"/>
+        <result column="download_url" property="downloadUrl"/>
     </resultMap>
 
 </mapper>

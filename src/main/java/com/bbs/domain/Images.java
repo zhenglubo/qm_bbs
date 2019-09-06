@@ -33,6 +33,9 @@ public class Images extends Model {
     @ApiModelProperty(value = "话题id")
     private Long topicId;
 
+    @ApiModelProperty(value = "评论id")
+    private Long commentId;
+
     @ApiModelProperty(value = "用户id")
     private Long userId;
 

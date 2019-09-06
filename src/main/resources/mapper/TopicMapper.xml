@@ -16,7 +16,6 @@
         <result column="phone" property="phone"/>
         <result column="wechat" property="wechat"/>
         <result column="qq" property="qq"/>
-        <result column="upload_img_ids" property="uploadImgIds"/>
         <result column="created_time" property="createdTime"/>
         <result column="last_updated_time" property="lastUpdatedTime"/>
         <result column="is_deleted" property="isDeleted"/>
@@ -26,22 +25,28 @@
         <result column="title" property="title"/>
         <result column="content" property="content"/>
         <result column="author" property="author"/>
+        <result column="avatar" property="avatar"/>
         <result column="comment_count" property="commentCount"/>
         <result column="view_count" property="viewCount"/>
         <result column="publish_hours" property="publishHours"/>
-        <collection property="uploadImgIds" ofType="com.bbs.domain.Images" javaType="java.util.ArrayList"
-                    select="getImages" column="upload_img_ids">
+        <collection property="uploadImgIds" ofType="com.bbs.vo.ImageDownloadVo" javaType="java.util.ArrayList"
+                    select="getImages" column="id">
         </collection>
     </resultMap>
 
-    <select id="getImages" resultMap="com.bbs.mapper.ImagesMapper.BaseResultMap">
-        select * from images
-        where id in (#{ids}) and is_deleted=0
+    <resultMap id="TopicDetailResultMap" type="com.bbs.vo.topic.TopicDetailVo" extends="TopicPageQueryVo">
+    </resultMap>
+
+
+
+    <select id="getImages" resultMap="com.bbs.mapper.ImagesMapper.ImageDownloadUrlResultMap">
+        select id,download_url from images
+        where topic_id =#{id} and is_deleted=0
     </select>
 
     <select id="pageQueryTopic" resultMap="TopicPageQueryVo">
-        select a.id id ,a.title,a.content,b.username as
-        author,a.comment_count,a.view_count,
+        select a.id id ,a.title,a.content,b.username as author,b.avatar,
+        a.comment_count,a.view_count,
         a.upload_img_ids,
         TIMESTAMPDIFF(HOUR,a.created_time,now()) AS publish_hours
         from topic a
@@ -52,5 +57,18 @@
                 and a.user_id=#{dto.userId}
             </if>
         </where>
+    </select>
+
+    <select id="selectDetailWithComment" resultMap="TopicDetailResultMap">
+        select
+            a.id id ,a.title,a.content,a.comment_count,
+            b.username as author,b.avatar,
+            a.view_count,a.upload_img_ids,
+            TIMESTAMPDIFF(HOUR,a.created_time,now()) AS publish_hours
+        from topic a
+        inner join user b on a.user_id = b.id
+        where
+            a.is_deleted = 0 and b.is_deleted = 0 and a.id=#{dto.topicId}
+
     </select>
 </mapper>

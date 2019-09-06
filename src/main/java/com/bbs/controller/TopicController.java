@@ -2,7 +2,9 @@ package com.bbs.controller;
 
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.bbs.domain.Topic;
 import com.bbs.dto.topic.QueryTopicDetailDto;
+import com.bbs.dto.topic.TopicAddDto;
 import com.bbs.dto.topic.TopicPageQueryDto;
 import com.bbs.result.DataResult;
 import com.bbs.service.ITopicService;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 
@@ -46,4 +49,11 @@ public class TopicController {
     public DataResult<TopicDetailVo> queryDetail(@RequestBody @Valid QueryTopicDetailDto dto){
         return topicService.queryDetail(dto);
     }
+
+    @ApiOperation("新增帖子")
+    @PostMapping("/add")
+    public DataResult<Topic> addTopic(@RequestBody @Valid TopicAddDto dto ,MultipartFile[] file){
+        return topicService.addTopic(dto,file);
+    }
+
 }

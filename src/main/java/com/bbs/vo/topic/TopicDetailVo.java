@@ -1,6 +1,6 @@
 package com.bbs.vo.topic;
 
-import com.bbs.domain.Images;
+import com.bbs.vo.comments.CommentsVo;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -15,19 +15,7 @@ import java.util.List;
 @Data
 public class TopicDetailVo extends TopicPageQueryVo{
 
-    @ApiModelProperty(value = "评论人")
-    private String commentUsername;
-    @ApiModelProperty(value = "头像")
-    private String commentUserAvatar;
-    @ApiModelProperty(value = "评论内容")
-    private String content;
-    @ApiModelProperty(value = "发布距离现在小时数")
-    private String commentPublishHours;
-    @ApiModelProperty(value = "发布时间")
-    private String commentPublishTimeDiff;
-    @ApiModelProperty(value = "点赞数")
-    private Integer likeNum;
-    @ApiModelProperty(value = "点赞图片列表")
-    private List<Images> commentImageList;
+    @ApiModelProperty(value = "评论列表",position = 11)
+    private List<CommentsVo> commentsVoList;
 
 }

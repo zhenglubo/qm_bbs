@@ -12,17 +12,17 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 用户帖
+ * 
  * </p>
  *
  * @author zlb
- * @since 2019-09-02
+ * @since 2019-09-06
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@ApiModel(value="Topic对象", description="用户帖")
-public class Topic extends Model {
+@ApiModel(value="Theme对象", description="")
+public class Theme extends Model {
 
     private static final long serialVersionUID = 1L;
 
@@ -30,16 +30,16 @@ public class Topic extends Model {
     @TableId(type = IdType.AUTO)
     private Long id;
 
+    @ApiModelProperty(value = "管理员id")
+    private Long adminId;
+
     @ApiModelProperty(value = "标题")
     private String title;
 
     @ApiModelProperty(value = "内容")
     private String content;
 
-    @ApiModelProperty(value = "用户id")
-    private Long userId;
-
-    @ApiModelProperty(value = "评论数")
+    @ApiModelProperty(value = "评论条数")
     private Integer commentCount;
 
     @ApiModelProperty(value = "被收藏次数")
@@ -48,10 +48,10 @@ public class Topic extends Model {
     @ApiModelProperty(value = "浏览次数")
     private Integer viewCount;
 
-    @ApiModelProperty(value = "是否置顶0否 1是")
+    @ApiModelProperty(value = "是否置顶0否1是")
     private Boolean top;
 
-    @ApiModelProperty(value = "是否为热帖0否 1是")
+    @ApiModelProperty(value = "是否为热帖0否1是")
     private Boolean good;
 
     @ApiModelProperty(value = "电话")
@@ -63,14 +63,14 @@ public class Topic extends Model {
     @ApiModelProperty(value = "qq号码")
     private String qq;
 
+    @ApiModelProperty(value = "是否被删除0否1是")
+    private Boolean isDeleted;
+
     @ApiModelProperty(value = "创建时间")
     private LocalDateTime createdTime;
 
-    @ApiModelProperty(value = "最新修改时间")
+    @ApiModelProperty(value = "修改时间")
     private LocalDateTime lastUpdatedTime;
-
-    @ApiModelProperty(value = "是否被删除0否1是")
-    private Boolean isDeleted;
 
 
 }

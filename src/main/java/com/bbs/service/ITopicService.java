@@ -4,10 +4,12 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.bbs.domain.Topic;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.bbs.dto.topic.QueryTopicDetailDto;
+import com.bbs.dto.topic.TopicAddDto;
 import com.bbs.dto.topic.TopicPageQueryDto;
 import com.bbs.result.DataResult;
 import com.bbs.vo.topic.TopicDetailVo;
 import com.bbs.vo.topic.TopicPageQueryVo;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * <p>
@@ -32,4 +34,12 @@ public interface ITopicService extends IService<Topic> {
      * @return
      */
     DataResult<TopicDetailVo> queryDetail(QueryTopicDetailDto dto);
+
+    /**
+     * 新增话题
+     * @param dto
+     * @param file
+     * @return
+     */
+    DataResult<Topic> addTopic(TopicAddDto dto, MultipartFile[] file);
 }
