@@ -47,7 +47,6 @@
     <select id="pageQueryTopic" resultMap="TopicPageQueryVo">
         select a.id id ,a.title,a.content,b.username as author,b.avatar,
         a.comment_count,a.view_count,
-        a.upload_img_ids,
         TIMESTAMPDIFF(HOUR,a.created_time,now()) AS publish_hours
         from topic a
         inner join user b on a.user_id = b.id
