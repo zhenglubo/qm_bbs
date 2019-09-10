@@ -3,6 +3,8 @@ package com.bbs.service;
 import com.bbs.domain.Theme;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.time.LocalDateTime;
+
 /**
  * <p>
  *  服务类
@@ -13,4 +15,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IThemeService extends IService<Theme> {
 
+    /**
+     * 今日新增主题数量
+     * @param begin
+     * @param end
+     * @return
+     */
+    int countTodayAddNum(LocalDateTime begin,LocalDateTime end);
 }

@@ -26,7 +26,7 @@ import javax.validation.Valid;
  */
 @Controller
 @RequestMapping("/user")
-@Api(tags = "用户controller")
+@Api(tags = "客户端-用户登录注册相关")
 public class UserController {
 
     @Autowired

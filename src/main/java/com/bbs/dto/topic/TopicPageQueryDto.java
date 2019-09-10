@@ -1,5 +1,6 @@
 package com.bbs.dto.topic;
 
+import com.bbs.dto.MyPage;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -10,12 +11,8 @@ import lombok.Data;
  **/
 
 @Data
-public class TopicPageQueryDto {
+public class TopicPageQueryDto extends MyPage {
 
-    @ApiModelProperty(value = "用户id",required = false,example = "1",position = 1)
-    private Long userId;
-    @ApiModelProperty(value = "当前页",required = true,example = "1",position = 2)
-    private int current = 1;
     @ApiModelProperty(value = "每一页大小",required = true,example = "10",position = 3)
     private int pageSize = 10;
 

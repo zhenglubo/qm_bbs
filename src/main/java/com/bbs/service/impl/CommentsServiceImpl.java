@@ -1,5 +1,6 @@
 package com.bbs.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.injector.methods.additional.LogicDeleteByIdWithFill;
@@ -8,6 +9,7 @@ import com.bbs.domain.Comments;
 import com.bbs.domain.Images;
 import com.bbs.dto.comment.AddCommentDto;
 import com.bbs.dto.comment.CommentPageQueryDto;
+import com.bbs.dto.comment.ManagerCommentPageQueryDto;
 import com.bbs.exception.BizRuntimeException;
 import com.bbs.mapper.CommentsMapper;
 import com.bbs.mapper.ImagesMapper;
@@ -18,6 +20,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bbs.uitls.OssUtil;
 import com.bbs.uitls.TimeUtil;
 import com.bbs.vo.comments.CommentsVo;
+import com.bbs.vo.comments.ManagerCommentsVo;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
@@ -30,6 +33,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -128,5 +132,47 @@ public class CommentsServiceImpl extends ServiceImpl<CommentsMapper, Comments> i
         updateWrapper.in("id", idList);
         int result = commentsMapper.update(null, updateWrapper);
         return result > 0 ? DataResultBuild.success("删除成功") : DataResultBuild.fail("删除失败");
+    }
+
+    @Override
+    public int countTodayAddNum(LocalDateTime begin, LocalDateTime end) {
+        QueryWrapper<Comments> queryWrapper = new QueryWrapper<>();
+        queryWrapper.ge("created_time", begin);
+        queryWrapper.le("created_time", end);
+        Integer count = commentsMapper.selectCount(queryWrapper);
+        return count != null ? count : 0;
+    }
+
+    /**
+     * 管理端-分页查询帖子
+     * @param dto
+     * @return
+     */
+    @Override
+    public DataResult<IPage<ManagerCommentsVo>> pageQueryComments(ManagerCommentPageQueryDto dto) {
+        Page<ManagerCommentsVo> page = new Page<>(dto.getCurrent(),dto.getPageSize());
+        page = commentsMapper.pageQueryComments(page,dto);
+        return DataResultBuild.success(page);
+    }
+
+    /**
+     * 管理端-删除评论
+     * @param commentId
+     * @return
+     */
+    @Override
+    @Transactional(rollbackFor = RuntimeException.class)
+    public DataResult<String> deleteComment(Long commentId) {
+        //删除图片
+        UpdateWrapper<Images> imagesUpdateWrapper = new UpdateWrapper<>();
+        imagesUpdateWrapper.set("is_deleted",true);
+        imagesUpdateWrapper.eq("comment_id",commentId);
+        imagesMapper.update(null,imagesUpdateWrapper);
+        //删除评论
+        UpdateWrapper<Comments> commentsUpdateWrapper = new UpdateWrapper<>();
+        commentsUpdateWrapper.set("is_deleted",true);
+        commentsUpdateWrapper.eq("id",commentId);
+        int result = commentsMapper.update(null, commentsUpdateWrapper);
+        return result>0?DataResultBuild.success("评论删除失败"):DataResultBuild.fail("评论删除成功");
     }
 }

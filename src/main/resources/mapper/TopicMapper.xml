@@ -62,12 +62,43 @@
         select
             a.id id ,a.title,a.content,a.comment_count,
             b.username as author,b.avatar,
-            a.view_count,a.upload_img_ids,
+            a.view_count,
             TIMESTAMPDIFF(HOUR,a.created_time,now()) AS publish_hours
         from topic a
         inner join user b on a.user_id = b.id
         where
             a.is_deleted = 0 and b.is_deleted = 0 and a.id=#{dto.topicId}
+
+    </select>
+
+    <resultMap id="ManagerTopicPageQueryResultMap" type="com.bbs.vo.topic.ManagerTopicPageQueryVo">
+        <result column="aid" property="id" />
+        <result column="title" property="title"/>
+        <result column="username" property="username"/>
+        <result column="comment_count" property="commentCount"/>
+        <result column="view_count" property="viewCount"/>
+        <result column="isDeleted" property="isDeleted"/>
+        <result column="createdTime" property="createdTime"/>
+    </resultMap>
+    <select id="selectTopicInfoForManager" resultMap="ManagerTopicPageQueryResultMap">
+        select a.id aid,a.title,b.username,a.comment_count,a.view_count,a.is_deleted isDeleted,a.created_time createdTime
+        from topic a
+        inner join user b on a.user_id = b.id
+        <where>
+            a.is_deleted=0 and b.is_deleted=0
+            <if test="dto.beginDate!=null">
+                and a.created_time &gt;#{dto.beginDate}
+            </if>
+            <if test="dto.endDate!=null">
+                and a.created_time &lt;#{dto.endDate}
+            </if>
+            <if test="dto.username!=null and dto.username!=''">
+                and b.username like concat('%',#{dto.username},'%')
+            </if>
+            <if test="dto.title!=null and dto.title!=''">
+                and a.title like concat('%',#{dto.title},'%')
+            </if>
+        </where>
 
     </select>
 </mapper>

@@ -28,7 +28,7 @@ import javax.validation.Valid;
  */
 @RestController
 @RequestMapping("/user-collection")
-@Api(tags = "用户收藏")
+@Api(tags = "客户端-帖子收藏")
 public class UserCollectionController {
 
     @Autowired

@@ -43,4 +43,33 @@
             and a.topic_id=#{topicId}
         </where>
     </select>
+
+    <resultMap id="ManagerCommentsVoResultMap" type="com.bbs.vo.comments.ManagerCommentsVo">
+        <result column="id" property="commentId"/>
+        <result column="commentContent" property="commentContent"/>
+        <result column="createdTime" property="createdTime"/>
+        <result column="title" property="topicTitle"/>
+        <result column="username" property="username"/>
+        <collection property="imgs" ofType="com.bbs.vo.ImageDownloadVo" javaType="java.util.ArrayList" select="getImages"
+                    column="id">
+        </collection>
+    </resultMap>
+    <select id="pageQueryComments" resultMap="ManagerCommentsVoResultMap">
+        select a.id as id,a.content as commentContent,a.created_time as createdTime,b.title,c.username
+        from comments a
+        inner join topic b on a.topic_id = b.id
+        inner join user c on a.user_id = c.id
+        <where>
+            a.is_deleted=0 and b.is_deleted=0 and c.is_deleted=0
+            <if test="dto.beginDate!=null">
+                and a.created_time &gt;#{dto.beginDate}
+            </if>
+            <if test="dto.endDate!=null">
+                and a.created_time &lt;#{dto.endDate}
+            </if>
+            <if test="dto.username!=null and dto.username!=''">
+                and c.username like concat('%',#{dto.username},'%')
+            </if>
+        </where>
+    </select>
 </mapper>

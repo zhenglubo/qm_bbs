@@ -1,6 +1,7 @@
 package com.bbs.domain;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.annotation.TableId;

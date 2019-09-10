@@ -1,16 +1,23 @@
 package com.bbs.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bbs.domain.User;
+import com.bbs.dto.user.ManagerUserPageQueryDto;
 import com.bbs.dto.user.UserLoginDto;
 import com.bbs.dto.user.UserRegisterDto;
 import com.bbs.exception.ApiAssert;
+import com.bbs.exception.BizRuntimeException;
 import com.bbs.mapper.UserMapper;
 import com.bbs.result.DataResult;
 import com.bbs.result.DataResultBuild;
 import com.bbs.service.IUserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bbs.uitls.StringUtil;
+import com.bbs.vo.user.ManagerUserPageQueryVo;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +40,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
     /**
      * 判断用户名是否存在
+     *
      * @param username
      * @return
      */
@@ -46,6 +54,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
     /**
      * 用户注册
+     *
      * @param dto
      * @return
      */
@@ -98,5 +107,53 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.select("email", email);
         return userMapper.selectOne(queryWrapper);
+    }
+
+    /**
+     * 管理端-今日新增用户数量
+     *
+     * @param begin
+     * @param end
+     * @return
+     */
+    @Override
+    public int countTodayAddNum(LocalDateTime begin, LocalDateTime end) {
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.ge("created_time", begin);
+        queryWrapper.le("created_time", end);
+        Integer count = userMapper.selectCount(queryWrapper);
+        return count != null ? count : 0;
+    }
+
+    /**
+     * 管理端-分页查询用户
+     *
+     * @param dto
+     * @return
+     */
+    @Override
+    public DataResult<IPage<ManagerUserPageQueryVo>> managerPageQueryUser(ManagerUserPageQueryDto dto) {
+        Page<ManagerUserPageQueryVo> page = new Page<>(dto.getCurrent(), dto.getPageSize());
+        page = userMapper.managerPageQueryUser(page, dto);
+        return DataResultBuild.success(page);
+    }
+
+    /**
+     * 管理端-删除用户
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public DataResult<String> managerDeleteUser(Long userId) {
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("id", userId);
+        queryWrapper.eq("is_deleted", false);
+        User user = userMapper.selectOne(queryWrapper);
+        if (user == null) {
+            throw new BizRuntimeException("该用户不存在");
+        }
+        int result = userMapper.deleteById(userId);
+        return result > 0 ? DataResultBuild.success("用户删除成功") : DataResultBuild.fail("用户删除失败");
     }
 }

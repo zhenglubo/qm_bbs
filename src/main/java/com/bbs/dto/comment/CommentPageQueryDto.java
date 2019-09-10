@@ -1,5 +1,6 @@
 package com.bbs.dto.comment;
 
+import com.bbs.dto.MyPage;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -10,12 +11,8 @@ import lombok.Data;
  **/
 
 @Data
-public class CommentPageQueryDto {
+public class CommentPageQueryDto extends MyPage {
 
-    @ApiModelProperty(value = "帖子id",required = true,example = "1",position = 1)
+    @ApiModelProperty(value = "帖子id",required = true,example = "1",position = 3)
     private Long topicId;
-    @ApiModelProperty(value = "当前页",required = true,example = "1",position = 2)
-    private int current = 1;
-    @ApiModelProperty(value = "每一页大小",required = true,example = "10",position = 3)
-    private int pageSize = 10;
 }

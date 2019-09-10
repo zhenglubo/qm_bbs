@@ -4,7 +4,9 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bbs.domain.Comments;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.bbs.domain.Images;
+import com.bbs.dto.comment.ManagerCommentPageQueryDto;
 import com.bbs.vo.comments.CommentsVo;
+import com.bbs.vo.comments.ManagerCommentsVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -33,4 +35,12 @@ public interface CommentsMapper extends BaseMapper<Comments> {
      * @return
      */
     List<Images> getImages(Long id);
+
+    /**
+     * 管理端-分页查询评论
+     * @param page
+     * @param dto
+     * @return
+     */
+    Page<ManagerCommentsVo> pageQueryComments(@Param("page") Page<ManagerCommentsVo> page, @Param("dto") ManagerCommentPageQueryDto dto);
 }

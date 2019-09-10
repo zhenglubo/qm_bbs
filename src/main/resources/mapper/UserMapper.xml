@@ -21,4 +21,22 @@
         <result column="in_time" property="createdTime" />
     </resultMap>
 
+    <resultMap id="ManagerPageQueryUser" type="com.bbs.vo.user.ManagerUserPageQueryVo">
+        <result column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="email" property="email"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="score" property="score"/>
+    </resultMap>
+
+    <select id="managerPageQueryUser" resultMap="ManagerPageQueryUser">
+        select id,username,email,created_time ,score
+        from user
+        <where>
+            is_deleted=0
+            <if test="dto.username!=null and dto.username!=''">
+                and username like concat('%',#{dto.username},'%')
+            </if>
+        </where>
+    </select>
 </mapper>

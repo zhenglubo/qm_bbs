@@ -32,7 +32,7 @@ import javax.validation.Valid;
  */
 @RestController
 @RequestMapping("/topic")
-@Api(tags = "用户贴子controller")
+@Api(tags = "客户端-帖子")
 public class TopicController {
 
     @Autowired
