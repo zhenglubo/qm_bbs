@@ -24,7 +24,7 @@ import javax.validation.Valid;
  * @author zlb
  * @since 2019-09-02
  */
-@Controller
+@RestController
 @RequestMapping("/user")
 @Api(tags = "客户端-用户登录注册相关")
 public class UserController {

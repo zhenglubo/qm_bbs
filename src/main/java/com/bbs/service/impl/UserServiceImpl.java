@@ -13,14 +13,22 @@ import com.bbs.exception.BizRuntimeException;
 import com.bbs.mapper.UserMapper;
 import com.bbs.result.DataResult;
 import com.bbs.result.DataResultBuild;
+import com.bbs.service.ISystemConfigService;
 import com.bbs.service.IUserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.bbs.uitls.CookieUtil;
+import com.bbs.uitls.SessionUtil;
 import com.bbs.uitls.StringUtil;
 import com.bbs.vo.user.ManagerUserPageQueryVo;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -37,6 +45,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private SessionUtil sessionUtil;
 
     /**
      * 判断用户名是否存在
@@ -60,14 +70,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
      */
     @Override
     public DataResult<String> insertUser(UserRegisterDto dto) {
-        ApiAssert.isEmpty(dto.getUsername(), "用户名为空");
-        ApiAssert.isTrue(selectByUserName(dto.getUsername()), "该用户名已经存在");
+        ApiAssert.notEmpty(dto.getUsername(), "用户名为空");
+        ApiAssert.notTrue(selectByUserName(dto.getUsername()), "该用户名已经存在");
         ApiAssert.isTrue(StringUtil.check(dto.getUsername(), StringUtil.USERNAMEREGEX), "用户名只能为a-z,A-Z,0-9组合且2-16位");
-        ApiAssert.isEmpty(dto.getEmail(), "邮箱不能为空");
-        ApiAssert.isTrue(StringUtil.check(dto.getEmail(), StringUtil.EMAILREGEX), "请输入正确的邮箱地址");
-        ApiAssert.isTrue(selectByEmail(dto.getEmail()) != null, "该邮箱已被注册，请更换新的邮箱");
-        ApiAssert.isEmpty(dto.getVerificationCode(), "验证码不能为空");
-        ApiAssert.isEmpty(dto.getPassword(), "密码不能为空");
+        ApiAssert.notEmpty(dto.getEmail(), "邮箱不能为空");
+        //ApiAssert.notTrue(StringUtil.check(dto.getEmail(), StringUtil.EMAILREGEX), "请输入正确的邮箱地址");
+        ApiAssert.notTrue(selectByEmail(dto.getEmail()) != null, "该邮箱已被注册，请更换新的邮箱");
+        ApiAssert.notEmpty(dto.getVerificationCode(), "验证码不能为空");
+        ApiAssert.notEmpty(dto.getPassword(), "密码不能为空");
         User user = new User();
         user.setUsername(dto.getUsername());
         user.setPassword(dto.getPassword());
@@ -78,6 +88,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         user.setActive(true);
         user.setIsDeleted(false);
         int result = userMapper.insert(user);
+        sessionUtil.doUserStorage(user);
         return result > 0 ? DataResultBuild.success("用户注册成功") : DataResultBuild.fail("用户注册失败");
     }
 
@@ -89,10 +100,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
      */
     @Override
     public DataResult<User> userLogin(UserLoginDto userLoginDto) {
-        ApiAssert.isEmpty(userLoginDto.getPassword(), "密码不能为空");
-        ApiAssert.isEmpty(userLoginDto.getUsername(), "用户名不能为空");
+        ApiAssert.notEmpty(userLoginDto.getPassword(), "密码不能为空");
+        ApiAssert.notEmpty(userLoginDto.getUsername(), "用户名不能为空");
         User user = this.selectByUserNameAndPassword(userLoginDto.getUsername(), userLoginDto.getPassword());
         ApiAssert.notNull(user, "用户名或密码错误");
+        sessionUtil.doUserStorage(user);
         return DataResultBuild.success(user);
     }
 
@@ -105,7 +117,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
     private User selectByEmail(String email) {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.select("email", email);
+        queryWrapper.eq("email", email);
+        return userMapper.selectOne(queryWrapper);
+    }
+
+    @Override
+    public User selectByToken(String token) {
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("token", token);
         return userMapper.selectOne(queryWrapper);
     }
 
@@ -156,4 +175,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         int result = userMapper.deleteById(userId);
         return result > 0 ? DataResultBuild.success("用户删除成功") : DataResultBuild.fail("用户删除失败");
     }
+
+
 }

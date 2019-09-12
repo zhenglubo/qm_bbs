@@ -14,6 +14,6 @@ import lombok.Data;
 public class TopicPageQueryDto extends MyPage {
 
     @ApiModelProperty(value = "每一页大小",required = true,example = "10",position = 3)
-    private int pageSize = 10;
+    private Long userId ;
 
 }

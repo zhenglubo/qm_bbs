@@ -58,9 +58,16 @@ public interface IUserService extends IService<User> {
     DataResult<IPage<ManagerUserPageQueryVo>> managerPageQueryUser(ManagerUserPageQueryDto dto);
 
     /**
-     * 管理端删除用户
+     * 管理端-删除用户
      * @param userId
      * @return
      */
     DataResult<String> managerDeleteUser(Long userId);
+
+    /**
+     * 查询用户依据token
+     * @param token
+     * @return
+     */
+    User selectByToken(String token);
 }
